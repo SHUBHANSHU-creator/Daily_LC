@@ -8,3 +8,26 @@
 
 # Input: grid = [[0,1],[1,0]]
 # Output: 2
+
+#BFS solution
+from collections import defaultdict,deque
+class Solution:
+    def shortestPathBinaryMatrix(self, grid: List[List[int]]) -> int:
+        n = len(grid)
+        q = deque()
+        if grid[0][0] == 1:
+            return -1
+        q.append((0,0,1))
+        direct = [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[-1,1],[1,-1],[1,1]]
+        visited = set()
+        while q:
+            for i in range(len(q)):
+                r,c,moves = q.popleft()
+                if r== n-1 and c == n-1:
+                    return moves
+                for dr,dc in direct:
+                    newR,newC = r+dr,c+dc
+                    if (min(newR,newC) >= 0 and max(newR,newC) < n ) and grid[newR][newC] == 0 and (newR,newC) not in visited:
+                        q.append((newR,newC,moves+1))
+                        visited.add((newR,newC))
+        return -1

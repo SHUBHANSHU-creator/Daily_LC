@@ -16,3 +16,28 @@
 # So the maximum bombs that can be detonated is max(1, 2) = 2.
 
 #DFS soltion
+class Solution:
+    def maximumDetonation(self, bombs: List[List[int]]) -> int:
+        adj = {i:[] for i in range(len(bombs))}
+        for i,(x1,y1,r1) in enumerate(bombs):
+            for j,(x2,y2,r2) in enumerate(bombs):
+                d = (x2-x1)**2 + (y2-y1)**2
+                d = d**(1/2)
+                if d <=r1 and i!=j:
+                    adj[i].append(j)
+
+        def dfs(node,visited,count):
+            visited.add(node)
+            count[0] += 1
+            for nei in adj[node]:
+                if nei not in visited:
+                    dfs(nei,visited,count)
+                    
+        mx = 0
+        for node in adj:
+            visited = set()
+            count = [0]
+            dfs(node,visited,count)
+            mx = max(mx,count[0])
+        
+        return mx
