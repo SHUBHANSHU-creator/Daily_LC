@@ -10,6 +10,8 @@
 # Output: 3
 # Explanation: After flips a = 1 , b = 4 , c = 5 such that (a OR b == c)
 
+
+#sol1
 class Solution:
     def minFlips(self, a: int, b: int, c: int) -> int:
         flips = 0
@@ -26,3 +28,28 @@ class Solution:
             b>>= 1
             c>>= 1
         return flips
+#solution_2
+class Solution:
+    def minFlips(self, a: int, b: int, c: int) -> int:
+        a = bin(a).replace("0b","")
+        b = bin(b).replace("0b","")
+        c = bin(c).replace("0b","")
+        mx = max(len(a),len(b),len(c))
+        a = ('0'*abs(len(a) - mx) + a)
+        b = ('0'*abs(len(b) - mx) + b)
+        c = ('0'*abs(len(c) - mx) + c)
+        res = 0
+        for i in range(len(a)-1,-1,-1):
+            d = 0
+            na = int(a[i])
+            nb = int(b[i])
+            
+            if int(a[i])|int(b[i]) != int(c[i]):
+                if (na^1)|nb == int(c[i]):
+                    d+=1
+                if na|(nb^1) == int(c[i]) and d==0:
+                    d+=1
+                if (na^1)|(nb^1) == int(c[i]) and d==0:
+                    d+=2
+            res += d
+        return res
